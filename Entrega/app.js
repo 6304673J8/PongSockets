@@ -83,14 +83,14 @@ WS.onmessage = (event) => {
 	if (data.player2Score != undefined){
 		score2_text.text = data.player2Score;
 	}
-	if(data.restartGame != undefined){
-	  restartGame = true;
-	}
 	if(data.victory1 != undefined){
 		victory1 = data.victory1;
 	}
 	if(data.victory2 != undefined){
 		victory2 = data.victory2;
+	}
+	if(data.restartGame != undefined){
+	  restartGame = true;
 	}
 };
 
@@ -221,7 +221,7 @@ function update(){
 		}
 }
 	
-	//DIBUJO
+	//Draw In Browser
 	graphics.clear();
 
 	if(!victory1 && !victory2){

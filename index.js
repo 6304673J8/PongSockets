@@ -64,7 +64,7 @@ WEBSOCKET_SERVER.on("request", (req) => {
 			});
 		}, 5000);
 	} else {
-		let conn_n = req.accept(null,req.origin);
+		let new_conn = req.accept(null,req.origin);
 		conn_n.send('{"player_num":'+currentSpectator+'}');
 		if(started){
 		conn_n.send('{"start":true}');
