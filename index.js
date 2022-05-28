@@ -65,12 +65,12 @@ WEBSOCKET_SERVER.on("request", (req) => {
 		}, 5000);
 	} else {
 		let new_conn = req.accept(null,req.origin);
-		conn_n.send('{"player_num":'+currentSpectator+'}');
+		new_conn.send('{"player_num":'+currentSpectator+'}');
 		if(started){
-		conn_n.send('{"start":true}');
+		new_conn.send('{"start":true}');
 		}
 		console.log("Spectator " + currentSpectator + " connected");
 		currentSpectator++;
-		spectators.push(conn_n);
+		spectators.push(new_conn);
 	}
 });
