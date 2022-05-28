@@ -14,6 +14,7 @@ const CONFIG = {
 
 let game = new Phaser.Game(CONFIG);
 
+// Players constructor
 const PLAYER_1 = {
   x: 16,
   y: 32,
@@ -31,6 +32,14 @@ const PLAYER_2 = {
 const PLAYER_ONE_INIT_Y = 32;
 const PLAYER_TWO_INIT_Y = 32;
 
+let score1_text;
+let score2_text;
+
+let player1Score = 0;
+let player2Score = 0;
+
+// Ball constructor
+
 const BALL = {
   x: RESOLUTION.w / 2,
   y: RESOLUTION.h / 2,
@@ -44,15 +53,20 @@ const BALL_SPEED = {
   y: Math.random() * SPEED + -SPEED,
 };
 
-const WS = new WebSocket("ws://10.40.1.242:1657");
-
 const ADD_BOUNCE = -0.15;
+
+// Core Game Setup
+
+const WS = new WebSocket("ws://10.40.1.242:1657");
 
 let cursors;
 let graphics;
 
 let playerNum = 0;
 let restartGame;
+
+let victory1 = false;
+let victory2 = false;
 
 let start = false;
 
@@ -61,44 +75,40 @@ WS.onopen = (event) => {
 };
 
 WS.onmessage = (event) => {
-  console.log(event.data);
-  let data = JSON.parse(event.data);
-  if (data.player_num != undefined) {
+	console.log(event.data);
+	let data = JSON.parse(event.data);
+	if (data.player_num != undefined) {
     playerNum = data.player_num;
-  } 
-	else if (data.start != undefined) {
-    console.log("START!!!");
-    start = true;
-  } 
-	else if (data.player1_y != undefined) {
-	  console.log("Player 1...Ready")
-    PLAYER_1.y = data.player1_y;
-    BALL.x = data.ball_x;
-    BALL.y = data.ball_y;
-  }
-	else if (data.player2_y != undefined) {
-    PLAYER_2.y = data.player2_y;
-  }
-	else if (data.player1_score != undefined) {
+	} 
+	if (data.start != undefined) {
+		console.log("START!!!");
+		start = true;
+	} 
+	if (data.player1_y != undefined) {
+		console.log("Player 1...Ready")
+		PLAYER_1.y = data.player1_y;
+		BALL.x = data.ball_x;
+		BALL.y = data.ball_y;
+	}
+	if (data.player2_y != undefined) {
+		PLAYER_2.y = data.player2_y;
+	}
+	if (data.player1_score != undefined) {
 		score1_text.text = data.player1_score;
 	}
-	else if (data.player2_score != undefined) {
+	if (data.player2_score != undefined) {
 		score2_text.text = data.player2_score;
 	}	
-//
-//	else if (data.restart != undefined) {
-	//	restartTwo();
-	//	scoreOne = data.scoreOne;
-	//	scoreTwo = data.scoreTwo;
-
-		//set_scores_text(scoreOne, scoreTwo);
-	//}
+	if(data.victory1 != undefined){
+		victory1 = data.victory1;
+	}
+	if(data.victory2 != undefined){
+		victory2 = data.victory2;
+	}
+	if(data.restartGame != undefined){
+	  restartGame = true;
+	}
 };
-let score1_text;
-let score2_text;
-
-let player1Score = 0;
-let player2Score = 0;
 
 function create() {
   cursors = this.input.keyboard.createCursorKeys();
